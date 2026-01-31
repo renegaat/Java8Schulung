@@ -1,0 +1,164 @@
+= Java 8 Koans
+Jürgen Krey <juergen.krey@msg-systems.de>
+v0.9, 12.02.2017: WorkInProgress
+//
+// configure DE settings for asciidoc
+:doctype: article
+:pagenums:
+:sectnums:
+:toc: macro:toclevels: 3
+:experimental:
+:source-highlighter: coderay
+//
+// translations DE
+:chapter-label: Kapitel
+:toc-title: Inhaltsverzeichnis
+:caution-caption: Achtung
+:important-caption: Wichtig
+:note-caption: Hinweis
+:tip-caption: Tip
+:warning-caption: Warnung
+:appendix-caption: Anhang
+:example-caption: Beispiel
+:figure-caption: Abbildung
+:table-caption: Tabelle
+//
+// where are images located?
+:imagesdir: ./images
+//
+// no numbering for orga chapters
+:numbered!:
+
+[cols="4*<", options="header"]
+[[VERSIONHISTORY]]
+.Änderungshistorie
+|======
+|Version |Datum |Änderung |Autor
+|0.9 | 12.02.2017 | Erstellung | Jürgen Krey
+|======
+
+// numbering from here on
+:numbered:
+
+
+== Einleitung
+
+Zum Lernen von Progammiersprachen erfreuen sich Koans (https://de.wikipedia.org/wiki/K%C5%8Dan[Wikipedia])
+wachsender Beliebtheit. Ein Koan ist eine Art JUnit-Test, der durch Ausfüllen
+eines vorgegebenen Codebereichs (`__`) erfolgreich ausgeführt wird.
+Jeder Koan vermittelt ein neues Sprachfeatures oder ein
+Programmierkonstrukt.
+
+[source, java]
+.Koan Beispielmethode
+----
+@Koan
+public void testInteger5() {
+  Integer i;
+  // put assignment here:
+  i = __;
+  assertEquals("i == 5", i, 5);
+}
+----
+
+Eine umfangreiche Sammlung von Koans
+für weitere Sprachen findet sich http://www.lauradhamilton.com/learn-a-new-programming-language-today-with-koans[hier].
+
+Der didaktisch-methodische Aufbau von Koans kann über eine separate, externe
+XML-Datei (`PathToEnlightenment.xml`, konfigurierbar) gesteuert werden.
+
+
+== Ausführung der Java 8 Koans
+
+Als Treiber für die Durchführung von Koans wird die Bibliothek
+`koans-lib-Summer2016.jar` footnote:[Quelle: https://github.com/DavidWhitlock/java-koans] verwendet.
+
+Die Koans können direkt aus der IDE heraus oder von der Kommandozeile heraus über das
+Skript `run.bat` (Windows) oder `run.sh` (Unix/Linux) gestartet werden.
+Für die Ausführung innerhalb von Intellij ist die Installation der Plugins `Batch-Support`
+und `CMD-Support` erforderlich.
+
+Das Skript überwacht den Testfall-/Koan-Quellcode, rekompiliert ihn nach Änderungen durch
+den Schüler und zeigt permanent den erledigten und der noch offenen Koans an.
+
+[source]
+----
+> ./run.bat
+----
+
+
+== Entwicklung eines neuen Koan
+
+Verwende einen existierenden Koan als Beispiel, um eine neue Klasse mit Koan-Methoden zu erstellen.
+Ein Koan-Methode zeichnet sich durch die @Koan Annotation aus. Sie muss als `public void`-Methode
+deklariert werden und darf keine Argumente haben.
+
+
+Die Reihenfolge, in der die Klassen und Methoden einer Koan-Suite ausgeführt werden, wird in der Datei
+`koans/app/config/PathToEnlightenment.xml` festgelegt.
+
+
+== Besonderheiten
+
+Der Koan-Treiber (`koans-lib-Summer2016.jar`) enthält einen sog. `DirectoryManager`, der
+spezifische Annahmen über das Verzeichnis-Layout einer
+Koan-App und ihres Edit-Compile-Test-Zyklus
+trifft footnote:[Dazu muss man folgenden Konstanten kennen:
+BASE_DIR = <any>;
+BIN_DIR = "bin";
+APP_DIR = "app";
+LIB_DIR = "lib";
+DATA_DIR = "data";
+I18N_DIR = "i18n";
+CONFIG_DIR = "config";
+projectDir=koans;
+sourceDir=src].
+
+Die wichtigste Besonderheit ist, dass
+das oberste Verzeichnis `koans` heisst. In ihm liegen
+die `run`-Skripte und in dem Unterverzeichnis `src` liegen die
+Koan-(Java-)Sourcen.
+
+.Table Verzeichnis Layout einer Koan-Anwendung
+[cols="4*", options="header"]
+|===
+| Name
+| Template
+| Wert
+| Zweck
+
+|mainDir
+|<BASE_DIR>/<PROJECT_DIR>
+| ./koans
+| TopLevel Vzns
+
+|configDir
+|<BASE_DIR>/<PROJECT_DIR>/<APP_DIR>/<CONFIG_DIR>
+| ./koans/app/config
+| Konfigurationen
+
+|prodSourceDir
+|<BASE_DIR>/<PROJECT_DIR>/<SRC_DIR>
+| ./koans/src
+| Koan-Sourcen
+
+|binDir
+|<BASE_DIR>/<PROJECT_DIR>/<APP_DIR>/<BIN_DIR>
+| ./koans/app/bin
+| kompilierte Koan Klasssen (tmp)
+
+|dataDir
+|<BASE_DIR>/<PROJECT_DIR>/<APP_DIR>/<DATA_DIR>
+| ./koans/app/data
+| Kopie der Koan-Sourcen (tmp)
+
+|libDir
+|<BASE_DIR>/<PROJECT_DIR>/<APP_DIR>/<LIB_DIR>
+| ./koans/app/lib
+| Jar-Vzns
+
+|i18NDir
+|<BASE_DIR>/<PROJECT_DIR>/<APP_DIR><I18N_DIR>
+| ./koans/app/i18n
+| Übersetzung
+|===
