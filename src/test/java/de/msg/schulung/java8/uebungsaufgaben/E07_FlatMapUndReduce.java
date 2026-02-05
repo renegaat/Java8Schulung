@@ -54,7 +54,7 @@ public class E07_FlatMapUndReduce {
 		final double rechnungssummeStreamed = rechnungsliste
 				.stream()
 				.filter(rechnung -> rechnung.getAdressat().startsWith("M"))
-				.filter(rechnung -> rechnungsliste.size() > 1)
+				.filter(rechnung -> rechnung.getPositionen().size() > 1)
 				.map(rechnung -> rechnung.getPositionen())
 				.flatMap(rechnungspositions -> rechnungspositions.stream())
 				.map(rechnungsposition -> rechnungsposition.getBetrag())
@@ -102,27 +102,13 @@ public class E07_FlatMapUndReduce {
 		// Ermittle die Rechnungssumme der o.g. Rechnungen mit Hilfe des Stream-APIs und durch Ausfüllen
 		// des u.g. Gerüsts.
 		//
-		// TODO Ersetze 0.0 nach Ausfüllen der u.g. TODOs durch den Stream-API-Ausdruck ab "rechnungsliste".
-		final double rechnungssummeStreamed = 0.0;
-		rechnungsliste.stream()
-				.filter(null
-						// TODO ersetze null durch einen Lambda-Ausdruck, der prüft, ob der Adressat einer Rechnung mit "M" anfängt
-				)
-				.filter(null
-						// TODO ersetze null durch einen Lambda-Ausdruck, der prüft, ob eine Rechnung mehr als 1 Positon hat
-				)
-				.map(null
-						// TODO ersetze null auch einen Lambda-Ausdruck oder eine Methodenreferenz zur Ermittlung der Positionen
-				)
-				.flatMap(null
-						// TODO ersetze null durch einen Lambda-Ausdruck, der eine Positionsliste auf einen Stream abbildet
-				)
-				.map(null
-						// TODO ersetze null durch einen Lambda-Ausdruck oder eine Methodenreferenz zur Ermittlung des Betrags
-				)
-				.reduce(0.0, null
-						// TODO ersetze null durch einen Lambda-Ausdruck zur Aufsummierung der Beträge; nutze alternativ sum (leichter)
-				);
+		final double rechnungssummeStreamed = rechnungsliste.stream()
+				.filter(rechnung -> rechnung.getAdressat().startsWith("M"))
+				.filter(rechnung -> rechnung.getPositionen().size() > 1)
+				.map(Rechnung::getPositionen)
+				.flatMap(positionen -> positionen.stream())
+				.map(Rechnungsposition::getBetrag)
+				.reduce(0.0, Double::sum);
 
 		Assert.assertTrue(RechnungFactory.getMatchingSumme() == rechnungssummeStreamed);
 	}
